@@ -7,7 +7,7 @@ function get_input() {
             else resolve(contents.split('\r\n'));
         });
     });
-}
+};
 
 function final_sum(input) {
     return new Promise((resolve) => {
@@ -41,4 +41,4 @@ get_input()
     first_repeat_sum(data)
     .then((data) => console.log("Second solution is " + data))
     .catch((err) => console.log(err));
-})
+});

@@ -1,6 +1,6 @@
 from functools import reduce
 
-def get_input():
+def get_input() -> list:
     with open("day1_input.txt", 'r') as content:
         return content.read().split("\n")
 

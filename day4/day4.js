@@ -4,7 +4,7 @@ function get_input() {
     return new Promise((resolve, reject) => {
         fs.readFile('day4_input.txt', 'utf8', (err, contents) => {
             if (err) reject(err);
-            else resolve(contents.split('\r\n'));
+            else resolve(contents.split('\r\n').sort());
         });
     });
 };
@@ -21,13 +21,7 @@ function base_line(input) {
     let guard = 0;
     let sleep = 0;
 
-    const dateRegex = /[0-9]{4}.[0-9]{2}.[0-9]{2}.[0-9]{2}.[0-9]{2}/;
     const stateRegex = /\[(\d+)-(\d+)-(\d+) (\d+):(\d+)\] (Guard #|)(\d+|wakes|falls)/;
-
-    // Sort the input
-    input.sort((a, b) => {
-        return new Date(a.match(dateRegex)) - new Date(b.match(dateRegex));
-    });
 
     for (const line of input) {
       [/*match*/, /*year*/, /*month*/, /*day*/, /*hour*/, minute, /*trash*/, state] = stateRegex.exec(line);

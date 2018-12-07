@@ -9,29 +9,6 @@ function get_input() {
     });
 };
 
-function determine_step_order(input) {
-    let steps = {};
-    input.forEach(line => {
-        line = line.split(' ');
-        const stepCurr = line[1];
-        const stepItPrecedes = line[7];
-        steps[stepCurr] = steps[stepCurr] || {node:stepCurr, leaves:{}};
-        steps[stepItPrecedes] = steps[stepItPrecedes] || {node:stepItPrecedes, leaves:{}};
-        steps[stepItPrecedes].leaves[stepCurr] = true;
-    });
-    let stepsOrder = '';
-    while(true) {
-        const step = Object.values(steps).filter(node => !Object.keys(node.leaves).length).sort((a,b)=> a.node < b.node ? -1 : 1);
-        if(!step[0]) break;
-        const node = step[0].node;
-        stepsOrder += node;
-        delete steps[node];
-        Object.values(steps).forEach(o => delete o.leaves[node]);
-    };
-
-    return stepsOrder;
-}
-
 function build_steps_graph(input) {
     let steps = {};
     input.forEach(line => {
@@ -43,6 +20,20 @@ function build_steps_graph(input) {
         steps[stepItPrecedes].leaves[stepCurr] = true;
     });
     return steps;
+}
+
+function determine_step_order(steps) {
+    let stepsOrder = '';
+    while(true) {
+        const step = Object.values(steps).filter(node => !Object.keys(node.leaves).length).sort((a,b)=> a.node < b.node ? -1 : 1);
+        if(!step[0]) break;
+        const node = step[0].node;
+        stepsOrder += node;
+        delete steps[node];
+        Object.values(steps).forEach(o => delete o.leaves[node]);
+    };
+
+    return stepsOrder;
 }
 
 function calculate_time_to_complete(steps, result, seconds) {
@@ -67,7 +58,8 @@ function calculate_time_to_complete(steps, result, seconds) {
 
 get_input()
 .then((data) => {
-    let steps = build_steps_graph(data);
-    console.log("First solution is " + determine_step_order(data));
-    console.log("Second solution is " + calculate_time_to_complete(steps, '', 0));
+    let part1_steps = build_steps_graph(data);
+    console.log("First solution is " + determine_step_order(part1_steps));
+    let part2_steps = build_steps_graph(data);
+    console.log("Second solution is " + calculate_time_to_complete(part2_steps, '', 0));
 });
